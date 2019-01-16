@@ -19,3 +19,5 @@ To download the atomic transitions, use `get_lines`
 data = nist.get_levels('Fe', 3)
 ```
 The above downloads all the atomic transitions of Li-like (with 3 electrons) iron and stores data into a `xarray.Dataset` object.
+
+See [this notebook](Download_data.ipynb) for an example usage.
