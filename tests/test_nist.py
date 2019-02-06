@@ -48,6 +48,7 @@ def test_lines_notfound(element, nele):
 def test_levels():
     data = nist.get_levels('Fe', 3)
     assert np.allclose(data[0], 0.0)
+    assert data[1]['Level(eV)_digits'] == 4
     assert data['Term'][0] == '2S'
     assert data['J'][0] == 1
     assert np.allclose(data[1], 48.5997)

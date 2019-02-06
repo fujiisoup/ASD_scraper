@@ -164,6 +164,7 @@ def _parse_levels(lines):
         data[key.strip() + '_uncertain'] = []
     data['Level(eV)_is_theoretical'] = []
     data['Level(eV)_is_predicted'] = []
+    data['Level(eV)_digits'] = []
     data['parity'] = []
 
     ionization_limit = None
@@ -199,7 +200,9 @@ def _parse_levels(lines):
                     data['parity'].append(parity)
                     data[key].append(term)
                 elif key == 'Level (eV)':
-                    data['Level (eV)'].append(_energy(item))
+                    eng, digit = _energy(item, return_digit=True)
+                    data['Level (eV)'].append(eng)
+                    data['Level(eV)_digits'].append(digit)
                     if len(item) > 0:
                         data['Level(eV)_is_predicted'].append(item[-1] == ']')
                         data['Level(eV)_is_theoretical'].append(item[-1] == ')')
@@ -291,10 +294,11 @@ def _parse_lines(lines):
     return da
 
 
-def _energy(string):
+def _energy(string, return_digit=False):
     value = np.nan
     try:
         value = float(string)
+        new_string = string
     except ValueError:
         new_string = ''
         for s in string:
@@ -306,7 +310,11 @@ def _energy(string):
             value = float(new_string)
         except ValueError:
             pass
-    return value
+    if return_digit:
+        digit = len(new_string) - new_string.find('.') - 1
+        return value, digit
+    else:
+        return value
 
 
 def _two_j(string):
